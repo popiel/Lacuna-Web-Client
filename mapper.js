@@ -299,7 +299,20 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			}
 			if(this.data.orbit) {
 				if(this.map.hidePlanets) {
-					this.imageHolder.innerHTML = this.data.orbit;
+					switch(this.data.type) {
+						case 'habitable planet':
+							this.imageHolder.innerHTML = "H";
+							break;
+						case 'gas giant':
+							this.imageHolder.innerHTML = "G";
+							break;
+						case 'asteroid':
+							this.imageHolder.innerHTML = "A";
+							break;
+						default:
+							this.imageHolder.innerHTML = "U";
+							break;
+					}
 				}
 				else {
 					var pSize = ((100 - Math.abs(this.data.size - 100)) / (100 / this.tileSizeInPx)) + 15;
@@ -866,6 +879,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		_showCachedTiles : function() {
 			if(this.tileCache) {
 				var bounds = this.visibleArea.coordBounds();
+				var planets = Game.EmpireData.planetsByName || {};
 				
 				//from left to right (smaller to bigger)
 				for(var xc=bounds.x1; xc <= bounds.x2; xc++){
@@ -873,6 +887,14 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 					for(var yc=bounds.y2; yc <= bounds.y1; yc++){
 						var tile = this.findTile(xc,yc,this.map.zoom);
 						if(tile) {
+							if(tile.data && tile.data.name) {
+								if(planets.hasOwnProperty(tile.data.name)) {
+									if(Lacuna.MapStar._map.tileCache[tile.x] && Lacuna.MapStar._map.tileCache[tile.x][tile.y]) {
+										delete Lacuna.MapStar._map.tileCache[tile.x][tile.y]; // Remove the planet from the cache
+									}
+									tile.blank = true;
+								}
+							}
 							if(tile.blank) {
 								tile.refresh();
 							}
