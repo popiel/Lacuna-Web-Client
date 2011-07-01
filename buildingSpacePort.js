@@ -152,7 +152,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				'	<button type="button" id="sendFleetGet">Get Available Ships For Target</button>',
 				'</div>',
 				'<div id="sendFleetSend" style="display:none;border-top:1px solid #52ACFF;margin-top:5px;padding-top:5px">',
-				'	<div class="yui-g"><div class="yui-u first">Sending ships to: <span id="sendFleetNote"></span></div><div class="yui-u" style="text-align:right;"><button type="button" id="sendFleetSubmit">Send Fleet</button></div></div>',
+				'	<div class="yui-g"><div class="yui-u first">Sending ships to: <span id="sendFleetNote"></span></div><div class="yui-u" style="text-align:right;">Set speed:<input type="text" id="setSpeed" value="0" size="6"><button type="button" id="sendFleetSubmit">Send Fleet</button></div></div>',
 				'	<div style="border-top:1px solid #52ACFF;margin-top:5px;"><ul id="sendFleetAvail"></ul></div>',
 				'</div>'
 			].join('')});
@@ -346,7 +346,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					'	<div class="yui-u first">',
 					'		<ul>',
 					'		<li><label style="font-weight:bold;">Attributes:</label></li>',
-					'		<li style="white-space:nowrap;"><label style="font-style:italic">Speed: </label>',ship.speed,'</li>',
+					'		<li style="white-space:nowrap;"><label style="font-style:italic">Speed: </label>',(ship.fleet_speed > 0 && ship.fleet_speed < ship.speed) ? ship.fleet_speed : ship.speed,'</li>',
 					'		<li style="white-space:nowrap;"><label style="font-style:italic">Hold Size: </label>',ship.hold_size,'</li>',
 					'		<li style="white-space:nowrap;"><label style="font-style:italic">Stealth: </label>',ship.stealth,'</li>',
 					'		<li style="white-space:nowrap;"><label style="font-style:italic">Combat: </label>',ship.combat,'</li>',
@@ -502,6 +502,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					'	<div class="yui-u first">',
 					'		<ul>',
 					'		<li><label style="font-weight:bold;">Attributes:</label></li>',
+					(ship.fleet_speed > 0 && ship.fleet_speed < ship.speed) ? '		<li style="white-space:nowrap;"><label style="font-style:italic">Fleet Speed: </label>'+ship.fleet_speed+'</li>' : '',
 					'		<li style="white-space:nowrap;"><label style="font-style:italic">Speed: </label>',ship.speed,'</li>',
 					'		<li style="white-space:nowrap;"><label style="font-style:italic">Hold Size: </label>',ship.hold_size,'</li>',
 					'		</ul>',
@@ -1194,36 +1195,51 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 		FleetSend : function(e) {
 			var btn = Event.getTarget(e);
 			btn.disabled = true;
-		
+
+			var speed = Dom.get("setSpeed").value;	
 			var selected = Sel.query("input:checked", "sendFleetAvail");
 			if(selected.length > 0) {
-				var ships = [], shipIds = [], confirmIso;
+				var ships = [], shipIds = [], confirmIso, minSpeed = 99999999;
 				for(var n=0; n<selected.length; n++) {
 					var s = selected[n].Ship;
 					ships.push(s);
 					shipIds.push(s.id);
+					if (s.speed < minSpeed) {
+						minSpeed = s.speed;
+					}
 				}
 				
 				if(this.FleetTarget && Lacuna.MapStar.NotFleetIsolationist(ships)) {					
-					this.service.send_fleet({
-						session_id:Game.GetSession(),
-						ship_ids:shipIds,
-						target:this.FleetTarget
-					}, {
-						success : function(o){
-							Lacuna.Pulser.Hide();
-							this.rpcSuccess(o);
+					if (speed < 0) {
+						alert('Set speed cannot be less than zero.');
+						btn.disabled = false;
+					}
+					else {
+						if (speed > 0 && speed > minSpeed) {
+							alert('Set speed cannot exceed the speed of the slowest ship.');
 							btn.disabled = false;
-							delete this.FleetTarget;
-							delete this.shipsView;
-							delete this.shipsTraveling;
-							this.GetFleetFor();
-						},
-						failure : function(o){
-							btn.disabled = false;
-						},
-						scope:this
-					});
+						} else {
+							this.service.send_fleet({
+								session_id:Game.GetSession(),
+								ship_ids:shipIds,
+								target:this.FleetTarget
+							}, {
+								success : function(o){
+									Lacuna.Pulser.Hide();
+									this.rpcSuccess(o);
+									btn.disabled = false;
+									delete this.FleetTarget;
+									delete this.shipsView;
+									delete this.shipsTraveling;
+									this.GetFleetFor();
+								},
+								failure : function(o){
+									btn.disabled = false;
+								},
+								scope:this
+							});
+						}
+					}
 				}
 			}
 			else {
