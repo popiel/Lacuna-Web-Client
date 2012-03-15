@@ -276,7 +276,24 @@ TradeWasteChains : function() {
         Event.purgeElement(details);
         details.innerHTML="";
         if (waste_chains.length > 0) {
-            
+            for(var i=0; i<waste_chains.length; i++) {
+                var obj = [i],
+                    nUl = ul.cloneNode(false),
+                    nLi = li.cloneNode(false);
+
+                nUl.WasteChain = obj;
+                Dom.addClass(nUl, "wasteChainInfo");
+                Dom.addClass(nUl, "clearafter");
+
+                Dom.addClass(nLi,"wasteChainLocation");
+                nLi.innerHTML = [
+                    '<img src="',Lib.AssetUrl,'star_map/','red',
+                    '.png" alt="','obj.star.name','" style="width:50px;height:50px;" />'
+                    ].join('');
+//                Event.on(nLi, "click", this.excavatorClick, obj, true);
+                nUl.appendChild(nLi);
+                details.appendChild(nUl);
+            } 
         }
     }
 },
