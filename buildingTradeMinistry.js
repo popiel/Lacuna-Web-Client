@@ -254,13 +254,32 @@ GetWasteChains : function(e) {
                     Lacuna.Pulser.Hide();
                     this.rpcSuccess(o);
                     this.wasteChains = o.result.waste_chain;
+                    this.TradeWasteChains();
                 },
                 scope : this
             });
         }
     }
 },
+TradeWasteChains : function() {
+    var waste_chains = this.wasteChains;
+    var details      = Dom.get('wasteChainDetails');
+    if (details) {
+        var ul = document.createElement("ul"),
+            li = document.createElement("li"),
+            info = Dom.get("wasteChainInfo");
 
+        info.innerHTML = [
+            'Total of ', waste_chains.length,
+            ' waste chains. This ministry can support 1 waste chain.'
+        ].join('');
+        Event.purgeElement(details);
+        details.innerHTML="";
+        if (waste_chains.length > 0) {
+            
+        }
+    }
+},
 
 _getAvailTab : function() {
 				   this.avail = new YAHOO.widget.Tab({ label: "Available Trades", content: [
