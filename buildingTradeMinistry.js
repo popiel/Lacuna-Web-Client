@@ -262,7 +262,7 @@ GetWasteChains : function(e) {
 
 
 _getAvailTab : function() {
-				   this.avail = new YAHOO.widget.Tab({ label: "Available Tradessssssss", content: [
+				   this.avail = new YAHOO.widget.Tab({ label: "Available Trades", content: [
 						   '<div>',
 						   '	<div style="border-bottom: 1px solid #52ACFF; padding-bottom: 5px; margin-bottom: 5px;"><label>Filter:</label><select id="tradeFilter"><option value="">All</option><option value="energy">Energy</option><option value="food">Food</option><option value="ore">Ore</option>',
 						   '	<option value="water">Water</option><option value="waste">Waste</option><option value="glyph">Glyph</option><option value="prisoner">Prisoner</option>',
