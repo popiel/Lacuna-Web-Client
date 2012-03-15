@@ -167,7 +167,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 		},
 		getChildTabs : function() {
 			this.mineTabIndex = 3; //array location plus 1 since Production tab is always first
-			return [this._getPushTab(), this._getAvailTab(), this._getMineTab(), this._getAddTab()];
+			return [this._getPushTab(), this._getAvailTab(), this._getMineTab(), this._getAddTab(), this._getWasteTab()];
 			},
 _getPushTab : function() {
 this.push = new YAHOO.widget.Tab({ label: "Push", content: [
@@ -229,9 +229,40 @@ Event.delegate("tradePushItems", "click", this.PushRemove, "button", this, true)
 Event.on("tradePushSend", "click", this.Push, this, true);
 
 return this.push;
-			  },
+},
+_getWasteTab : function () {
+    this.wasteTab = new YAHOO.widget.Tab({ label: "Waste Chain", content: [
+        '<div>',
+        '   <div id="wasteChain"></div>',
+        '   <div class="wasteChainContainerclearafter">',
+        '       <ul id="wasteDetails" class="wasteInfo">',
+        '       </ul>',
+        '   </div>',
+        '</div>'
+    ].join('')});
+    this.wasteTab.subscribe("activeChange", this.GetWasteChains, this, true);
+    return this.wasteTab;
+},
+GetWasteChains : function(e) {
+    if (e.newValue) {
+        if (this.wasteChains) {
+            this.wasteChainsDisplay();
+        }
+        else {
+            Lacuna.Pulser.Show();
+            this.service.view_waste_chain({ session_id : Game.GetSession(), building_id : this.building.id }, {
+                success : function(o) {
+                    Lacuna.Pulser.Hide();
+                },
+                scope : this
+            });
+        }
+    }
+},
+
+
 _getAvailTab : function() {
-				   this.avail = new YAHOO.widget.Tab({ label: "Available Trades", content: [
+				   this.avail = new YAHOO.widget.Tab({ label: "Available Tradessssssss", content: [
 						   '<div>',
 						   '	<div style="border-bottom: 1px solid #52ACFF; padding-bottom: 5px; margin-bottom: 5px;"><label>Filter:</label><select id="tradeFilter"><option value="">All</option><option value="energy">Energy</option><option value="food">Food</option><option value="ore">Ore</option>',
 						   '	<option value="water">Water</option><option value="waste">Waste</option><option value="glyph">Glyph</option><option value="prisoner">Prisoner</option>',

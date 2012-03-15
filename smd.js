@@ -2289,6 +2289,13 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 				"target":"/trade",
 
 				"services": {
+                    "view_waste_chain" : {
+                        "description": "",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false}
+                        ]
+                    },
 					"add_to_market" : {
 						"description": "",
 						"parameters": [
@@ -2315,22 +2322,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							{"name":"building_id", "type":"string", "optional":false}
 						],
 						"returns":{"type":"object"}
-						/*
-						 {
-							"ships" : [
-								{
-									"id" : "id-goes-here",
-									"name" : "Enterprise",
-									"type" : "probe",
-									"hold_size" : 0,
-									"speed" : 3900
-								},
-								...
-							],
-							"cargo_space_used_each" : 10000,
-							"status" : { ... }
-						 }
-						*/
 					},
 					"get_prisoners" : {
 						"description": "Returns a list of prisoners that may be traded. Used with the add_trade method.",
@@ -2339,20 +2330,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							{"name":"building_id", "type":"string", "optional":false}
 						],
 						"returns":{"type":"object"}
-						/*
-						 {
-							"prisoners" : [
-								{
-									"id" : "id-goes-here",
-									"name" : "Jack Bauer",
-									"level" : "5"
-								},
-								...
-							],
-							"cargo_space_used_each" : 100,
-							"status" : { ... }
-						 }
-						*/
 					},
                     "get_plan_summary" : {
                         "description": "Returns a list of plans that may be traded. Used with the add_trade method.",
@@ -2369,21 +2346,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							{"name":"building_id", "type":"string", "optional":false}
 						],
 						"returns":{"type":"object"}
-						/*
-						 {
-							"plans" : [
-								{
-									"id" : "id-goes-here",
-									"name" : "Intelligence Ministry",
-									"level" : "7",
-									"extra_build_level" : "0"        # some special plans will build a building from their level all the way to this number
-								},
-								...
-							],
-							"cargo_space_used_each" : 100,
-							"status" : { ... }
-						 }
-						*/
 					},
                     "get_glyph_summary" : {
                         "description": "Returns a list of glyphs that may be traded. Used with the add_trade method.",
@@ -2400,21 +2362,8 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							{"name":"building_id", "type":"string", "optional":false}
 						],
 						"returns":{"type":"object"}
-						/*
-						 {
-							"glyphs" : [
-								{
-									"id" : "id-goes-here",
-									"type" : "bauxite"
-								},
-								...
-							],
-							"cargo_space_used_each" : 100,
-							"status" : { ... }
-						 }
-						*/
-					},
-					"withdraw_from_market" : {
+                    },
+                    "withdraw_from_market" : {
 						"description": "Remove a trade that you have offered and collect the items up for trade.",
 						"parameters": [
 							{"name":"session_id", "type":"string", "optional":false},
@@ -2467,19 +2416,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							{"name":"building_id", "type":"string", "optional":false}
 						],
 						"returns":{"type":"object"}
-						/*
-						 {
-							"status" : { ... },
-							"cargo_space_used_each" : 100,
-							"resources" : {
-									"water" : 14000,
-									"waste" : 393,
-									"bauxite" : 47,
-									"cheese" : 1193,
-									...
-							}
-						 }
-						*/
 					},
 					"push_items" : {
 						"description": "",
@@ -2490,27 +2426,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							{"name":"items", "type":"object", "optional":false},
 							{"name":"options", "type":"object", "optional":true}
 						],
-						/*
-							items array of objects
-								resouce format = {
-									"type" : "bauxite", //allowed = water, energy, waste, essentia, bean, lapis, potato, apple, root, corn, cider, wheat, bread, soup, chip, pie, pancake, milk, meal, algae, syrup, fungus, burger, shake, beetle, rutile, chromite, chalcopyrite, galena, gold, uraninite, bauxite, goethite, halite, gypsum, trona, kerogen, methane, anthracite, sulfur, zircon, monazite, fluorite, beryl, or magnetite
-									"quantity" : 10000
-								 }
-								 plan format =  {
-									"type" : "plan",
-									"plan_id" : "id-goes-here"
-								 }
-								 glyph format =  {
-									"type" : "glyph",
-									"glyph_id" : "id-goes-here"
-								 }
-							options
-								+ ship_id
-								+ stay (if == 1 then it will stay on planet if there is an available dock)
-						*/
 						"returns":{"type":"object"}
-						/*
-						*/
 					},
 					"report_abuse" : {
 						"description": "",
