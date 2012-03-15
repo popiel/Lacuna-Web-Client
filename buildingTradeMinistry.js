@@ -232,12 +232,10 @@ return this.push;
 },
 _getWasteTab : function () {
     this.wasteTab = new YAHOO.widget.Tab({ label: "Waste Chain", content: [
-        '<div>',
-        '   <div id="wasteChain"></div>',
-        '   <div class="wasteChainContainerclearafter">',
-        '       <ul id="wasteDetails" class="wasteInfo">',
-        '       </ul>',
-        '   </div>',
+        '<div id="wasteChainInfo"></div>',
+        '<div class="wasteChainContainer">',
+        '  <div id="wasteChainDetails">',
+        '  </div>',
         '</div>'
     ].join('')});
     this.wasteTab.subscribe("activeChange", this.GetWasteChains, this, true);
@@ -252,7 +250,10 @@ GetWasteChains : function(e) {
             Lacuna.Pulser.Show();
             this.service.view_waste_chain({ session_id : Game.GetSession(), building_id : this.building.id }, {
                 success : function(o) {
+                    YAHOO.log(o, "info", "TradeMinistry.view_waste_chain.success");
                     Lacuna.Pulser.Hide();
+                    this.rpcSuccess(o);
+                    this.wasteChains = o.result.waste_chain;
                 },
                 scope : this
             });
