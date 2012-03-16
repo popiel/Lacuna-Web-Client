@@ -277,7 +277,7 @@ TradeWasteChains : function() {
         details.innerHTML="";
         if (waste_chains.length > 0) {
             for(var i=0; i<waste_chains.length; i++) {
-                var obj = [i],
+                var obj = waste_chains[i],
                     nUl = ul.cloneNode(false),
                     nLi = li.cloneNode(false);
 
@@ -287,11 +287,33 @@ TradeWasteChains : function() {
 
                 Dom.addClass(nLi,"wasteChainLocation");
                 nLi.innerHTML = [
-                    '<img src="',Lib.AssetUrl,'star_map/','red',
-                    '.png" alt="','obj.star.name','" style="width:50px;height:50px;" />'
+                    '<img src="',Lib.AssetUrl,'star_map/',obj.star.color,
+                    '.png" alt="',obj.star.name,'" style="width:50px;height:50px;" />'
                     ].join('');
 //                Event.on(nLi, "click", this.excavatorClick, obj, true);
                 nUl.appendChild(nLi);
+
+                nLi = li.cloneNode(false);
+//                Dom.addClass(nLi,"excavatorAbandon");
+                var bbtn = document.createElement("button");
+                bbtn.setAttribute("type", "button");
+                bbtn.innerHTML = "Update";
+                bbtn = nLi.appendChild(bbtn);
+                nUl.appendChild(nLi);
+
+                nLi = li.cloneNode(false);
+                nLi.innerHTML = obj.star.name;
+                nUl.appendChild(nLi);
+
+                nLi = li.cloneNode(false)
+                nLi.innerHTML = [
+                    'Waste/hr ',
+                    '<input type="text" value="',obj.waste_hour,'">',
+                    ' Percent transferred ',
+                    obj.percent_transferred
+                    ].join('');
+                nUl.appendChild(nLi);
+
                 details.appendChild(nUl);
             } 
         }
