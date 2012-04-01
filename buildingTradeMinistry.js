@@ -244,13 +244,13 @@ _getWasteTab : function () {
 GetWasteChains : function(e) {
     if (e.newValue) {
         if (this.wasteChains) {
-            this.wasteChainsDisplay();
+            this.WasteChainsDisplay();
         }
         else {
             Lacuna.Pulser.Show();
-            this.service.view_waste_chain({ session_id : Game.GetSession(), building_id : this.building.id }, {
+            this.service.view_waste_chains({ session_id : Game.GetSession(), building_id : this.building.id }, {
                 success : function(o) {
-                    YAHOO.log(o, "info", "TradeMinistry.view_waste_chain.success");
+                    YAHOO.log(o, "info", "TradeMinistry.view_waste_chains.success");
                     Lacuna.Pulser.Hide();
                     this.rpcSuccess(o);
                     this.wasteChains = o.result.waste_chain;
@@ -260,6 +260,8 @@ GetWasteChains : function(e) {
             });
         }
     }
+},
+WasteChainsDisplay : function() {
 },
 TradeWasteChains : function() {
     var waste_chains = this.wasteChains;

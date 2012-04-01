@@ -2289,7 +2289,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 				"target":"/trade",
 
 				"services": {
-                    "view_waste_chain" : {
+                    "view_waste_chains" : {
                         "description": "",
                         "parameters": [
                             {"name":"session_id", "type":"string", "optional":false},
